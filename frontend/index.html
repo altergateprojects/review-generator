@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Share Your Experience</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+</head>
+<body>
+    <!-- Navigation Bar -->
+    <nav class="navbar" id="navbar">
+        <div class="navbar-content">
+            <div class="navbar-brand">
+                <span class="navbar-logo">⭐</span>
+                <span class="navbar-title">Review Generator</span>
+            </div>
+            <div class="navbar-business-selector" id="navbar-business-selector">
+                <label for="navbar-business-select">Select Business:</label>
+                <select id="navbar-business-select" class="navbar-select">
+                    <option value="">Choose a business...</option>
+                </select>
+            </div>
+        </div>
+    </nav>
+    
+    <div class="container">
+        <!-- Page 1: Review Landing Page -->
+        <div id="page-1" class="page active">
+            <!-- Business Selector (shown in multi-business mode) -->
+            <div id="business-selector-container" class="business-selector-container hidden">
+                <h2 class="headline">Select Business to Review</h2>
+                <div id="business-cards" class="business-cards"></div>
+            </div>
+            
+            <!-- Review Form (shown after business selection) -->
+            <div id="review-form-container" class="review-form-container">
+                <div class="header">
+                    <img id="business-logo" src="" alt="" class="logo hidden">
+                    <h1 id="business-name">Loading...</h1>
+                </div>
+                
+                <div class="content">
+                    <h2 class="headline">How was your experience with us?</h2>
+                    
+                    <!-- Star Rating -->
+                    <div class="star-rating">
+                        <div class="stars">
+                            <span class="star" data-rating="1">★</span>
+                            <span class="star" data-rating="2">★</span>
+                            <span class="star" data-rating="3">★</span>
+                            <span class="star" data-rating="4">★</span>
+                            <span class="star" data-rating="5">★</span>
+                        </div>
+                        <p class="rating-text" id="rating-text">Select a rating</p>
+                    </div>
+                    
+                    <!-- Language Selector -->
+                    <div id="language-container" class="language-container hidden">
+                        <label for="language-select">Review Language:</label>
+                        <select id="language-select" class="language-select">
+                            <option value="english">English</option>
+                            <option value="marathi">मराठी (Marathi)</option>
+                            <option value="hindi">हिंदी (Hindi)</option>
+                            <option value="gujarati">ગુજરાતી (Gujarati)</option>
+                            <option value="tamil">தமிழ் (Tamil)</option>
+                            <option value="telugu">తెలుగు (Telugu)</option>
+                            <option value="kannada">ಕನ್ನಡ (Kannada)</option>
+                            <option value="bengali">বাংলা (Bengali)</option>
+                        </select>
+                    </div>
+                    
+                    <!-- Experience Tags -->
+                    <div id="tags-container" class="tags-container hidden">
+                        <p class="tags-label">What stood out? (optional)</p>
+                        <div id="tags" class="tags"></div>
+                    </div>
+                    
+                    <!-- Customer Note -->
+                    <div id="note-container" class="note-container hidden">
+                        <label for="customer-note">Anything specific you'd like to mention? (optional)</label>
+                        <textarea 
+                            id="customer-note" 
+                            placeholder="e.g. The staff was really helpful..."
+                            maxlength="500"
+                            rows="3"
+                        ></textarea>
+                        <span class="char-count"><span id="char-count">0</span>/500</span>
+                    </div>
+                    
+                    <!-- Honeypot fields (hidden from users, catch bots) -->
+                    <input type="text" name="website" id="website" class="honeypot" tabindex="-1" autocomplete="off">
+                    <input type="text" name="email_confirm" id="email_confirm" class="honeypot" tabindex="-1" autocomplete="off">
+                    
+                    <!-- Generate Button -->
+                    <button id="generate-btn" class="btn btn-primary" disabled>
+                        Generate My Review ✨
+                    </button>
+                </div>
+                
+                <footer class="footer">
+                    <p>Powered by AI Review Generator</p>
+                </footer>
+            </div>
+        </div>
+        
+        <!-- Page 2: Generated Review Screen -->
+        <div id="page-2" class="page">
+            <div class="header">
+                <img id="business-logo-2" src="" alt="" class="logo hidden">
+                <h1 id="business-name-2">Business Name</h1>
+            </div>
+            
+            <div class="content">
+                <h2 class="headline">Your review is ready!</h2>
+                
+                <!-- Generated Review Card -->
+                <div class="review-card">
+                    <div class="review-stars" id="review-stars"></div>
+                    <p class="review-text" id="review-text">Loading...</p>
+                </div>
+                
+                <!-- Action Buttons -->
+                <div class="button-group">
+                    <button id="regenerate-btn" class="btn btn-secondary">
+                        🔄 Get a different version
+                    </button>
+                    <button id="copy-submit-btn" class="btn btn-primary btn-large">
+                        📋 Copy & Open Google Reviews
+                    </button>
+                </div>
+                
+                <p class="helper-text">
+                    Your review will be copied to your clipboard. Just paste it on the page that opens!
+                </p>
+                
+                <button id="back-btn" class="btn btn-text">← Start over</button>
+            </div>
+        </div>
+        
+        <!-- Loading Overlay -->
+        <div id="loading-overlay" class="loading-overlay hidden">
+            <div class="spinner"></div>
+            <p>Generating your review...</p>
+        </div>
+        
+        <!-- Toast Notification -->
+        <div id="toast" class="toast hidden"></div>
+    </div>
+    
+    <script src="app.js"></script>
+</body>
+</html>

@@ -1,0 +1,21 @@
+{
+  "name": "review-generator",
+  "version": "1.0.0",
+  "description": "AI-Powered Google Review Generator",
+  "scripts": {
+    "install-backend": "cd backend && npm install",
+    "start": "cd backend && npm start",
+    "dev": "cd backend && npm run dev"
+  },
+  "keywords": [
+    "reviews",
+    "ai",
+    "google",
+    "gemini"
+  ],
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "qrcode": "^1.5.4"
+  }
+}
