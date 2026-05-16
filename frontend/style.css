@@ -194,6 +194,13 @@ body {
     margin-bottom: 15px;
 }
 
+.star-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+}
+
 .star {
     font-size: 50px;
     color: var(--star-inactive);
@@ -202,15 +209,30 @@ body {
     user-select: none;
 }
 
-.star:hover,
-.star.hover {
+.star-number {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--text-secondary);
+    transition: all 0.2s ease;
+}
+
+.star-wrapper:hover .star {
     color: var(--star-color);
     transform: scale(1.2);
+}
+
+.star-wrapper:hover .star-number {
+    color: var(--star-color);
 }
 
 .star.selected {
     color: var(--star-color);
     animation: starPop 0.3s ease;
+}
+
+.star-wrapper:has(.star.selected) .star-number {
+    color: var(--star-color);
+    font-weight: 700;
 }
 
 @keyframes starPop {

@@ -2,8 +2,8 @@ const express = require('express');
 const { GoogleGenerativeAI } = require('@google/generative-ai');
 const router = express.Router();
 
-// System prompt for Gemini
-const SYSTEM_PROMPT = `You are a real customer writing a Google review. Your job is to write a concise, genuine, human-sounding review for a business.
+// System prompts for different rating levels
+const SYSTEM_PROMPT_HIGH = `You are a real customer writing a Google review. Your job is to write a concise, genuine, human-sounding review for a business.
 
 Rules:
 - Write in first person, casual but respectful tone
@@ -15,12 +15,45 @@ Rules:
 - Do NOT start every review with "I"
 - Keep it between 50–100 words (concise but informative)
 - Never mention discounts, incentives, or being asked to leave a review
-- If rating is 4–5 stars: positive, mention specific details from the tags, use keywords like "highly recommend", "best choice", "perfect for"
-- If rating is 3 stars: balanced, polite, constructive
-- If rating is 1–2 stars: honest but not aggressive
+- Be positive and mention specific details from the tags
+- Use keywords like "highly recommend", "best choice", "perfect for"
 - Include 2-3 specific details about your visit
 - Make it feel authentic and helpful to other customers
 - Output ONLY the review text, nothing else`;
+
+const SYSTEM_PROMPT_MEDIUM = `You are a real customer writing a Google review. Your job is to write a concise, genuine, human-sounding review for a business.
+
+Rules:
+- Write in first person, casual but respectful tone
+- Vary sentence structure and length each time — never use the same template twice
+- Sound like a real person, not a marketer. Use natural phrases.
+- IMPORTANT: Naturally mention the business name at least once in the review
+- Keep it between 50–100 words (concise but informative)
+- Never mention discounts, incentives, or being asked to leave a review
+- Be balanced and polite
+- Mention both positives and areas for improvement
+- Be constructive, not harsh
+- Focus on specific details
+- Make it feel authentic and helpful to other customers
+- Output ONLY the review text, nothing else`;
+
+const SYSTEM_PROMPT_LOW = `You are a real customer writing constructive feedback for a business. Your job is to write a helpful, balanced review that provides improvement suggestions.
+
+IMPORTANT RULES FOR LOW RATINGS:
+- Write in first person, polite and respectful tone
+- Focus on CONSTRUCTIVE CRITICISM, not harsh complaints
+- Mention what could be improved, but also acknowledge any positives
+- Frame feedback as suggestions for improvement
+- Use phrases like "could be better", "room for improvement", "would suggest", "hope to see"
+- AVOID harsh words like "terrible", "awful", "worst", "horrible"
+- Be specific about issues but remain professional
+- Mention the business name naturally
+- Keep it between 50–100 words
+- End on a hopeful note about potential improvements
+- Make it sound like you want the business to succeed
+- Output ONLY the review text, nothing else
+
+Example tone: "Had an okay experience at [Business]. The service could be faster and the facilities need some updates. However, the staff was friendly and tried their best. With some improvements in [specific area], this place has potential. Hope to see positive changes in the future."`;
 
 // Honeypot field check
 const checkHoneypot = (req, res, next) => {
@@ -98,6 +131,16 @@ router.post('/generate-review', checkHoneypot, validateInput, async (req, res) =
     
     const languageInstruction = languageInstructions[language.toLowerCase()] || languageInstructions.english;
     
+    // Select appropriate system prompt based on rating
+    let systemPrompt;
+    if (stars >= 4) {
+      systemPrompt = SYSTEM_PROMPT_HIGH; // 4-5 stars: positive review
+    } else if (stars === 3) {
+      systemPrompt = SYSTEM_PROMPT_MEDIUM; // 3 stars: balanced review
+    } else {
+      systemPrompt = SYSTEM_PROMPT_LOW; // 1-2 stars: constructive feedback
+    }
+    
     // Initialize Gemini
     const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
     const model = genAI.getGenerativeModel({ 
@@ -112,12 +155,12 @@ router.post('/generate-review', checkHoneypot, validateInput, async (req, res) =
     const experienceHighlights = tags.length > 0 ? tags.join(', ') : 'general visit';
     const customerWords = customerNote.trim() || 'none provided';
     
-    // Add SEO keywords instruction if available
-    const keywordsInstruction = seoKeywords.length > 0 
+    // Add SEO keywords instruction if available (only for high ratings)
+    const keywordsInstruction = (stars >= 4 && seoKeywords.length > 0)
       ? `\nNaturally incorporate 1-2 of these keywords if relevant: ${seoKeywords.join(', ')}`
       : '';
     
-    const fullPrompt = `${SYSTEM_PROMPT}
+    const fullPrompt = `${systemPrompt}
 
 ${languageInstruction}
 
