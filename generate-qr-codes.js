@@ -10,7 +10,7 @@ const path = require('path');
 const config = require('./config');
 
 // Base URL - UPDATE THIS AFTER DEPLOYMENT
-const BASE_URL = 'https://rewiew-alpha.vercel.app'; // Production URL
+const BASE_URL = 'https://review-generator-mauve.vercel.app'; // Production URL
 // const BASE_URL = 'http://localhost:3000'; // Local testing
 
 async function generateQRCodes() {
