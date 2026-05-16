@@ -16,6 +16,14 @@
       "dest": "backend/server.js"
     },
     {
+      "src": "/(royal-shourya-resort|royal-villa-resort)",
+      "dest": "frontend/index.html"
+    },
+    {
+      "src": "/(.*\\.(css|js|png|jpg|jpeg|gif|svg|ico|woff|woff2|ttf|eot))",
+      "dest": "frontend/$1"
+    },
+    {
       "src": "/(.*)",
       "dest": "frontend/$1"
     }

@@ -10,8 +10,8 @@ const path = require('path');
 const config = require('./config');
 
 // Base URL - UPDATE THIS AFTER DEPLOYMENT
-const BASE_URL = 'http://localhost:3000'; // Change to production URL after deployment
-// const BASE_URL = 'https://your-domain.vercel.app'; // Production example
+const BASE_URL = 'https://rewiew-alpha.vercel.app'; // Production URL
+// const BASE_URL = 'http://localhost:3000'; // Local testing
 
 async function generateQRCodes() {
   console.log('🎨 Generating QR Codes for Business Review Pages...\n');

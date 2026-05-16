@@ -1,1 +1,1 @@
-http://localhost:3000/royal-villa-resort
+https://rewiew-alpha.vercel.app/royal-villa-resort

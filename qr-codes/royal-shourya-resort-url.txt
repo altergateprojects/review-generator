@@ -1,1 +1,1 @@
-http://localhost:3000/royal-shourya-resort
+https://rewiew-alpha.vercel.app/royal-shourya-resort
