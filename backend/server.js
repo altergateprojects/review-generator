@@ -38,13 +38,15 @@ app.get('/:businessId', (req, res, next) => {
   next();
 });
 
-// Rate limiting
+// Rate limiting - more lenient for production
 const limiter = rateLimit({
   windowMs: parseInt(process.env.RATE_LIMIT_WINDOW_MS) || 3600000, // 1 hour
-  max: parseInt(process.env.RATE_LIMIT_MAX_REQUESTS) || 10,
+  max: parseInt(process.env.RATE_LIMIT_MAX_REQUESTS) || 100, // Increased to 100 requests per hour
   message: { error: 'Too many requests, please try again later.' },
   standardHeaders: true,
   legacyHeaders: false,
+  // Skip rate limiting for config endpoint
+  skip: (req) => req.path === '/api/config' || req.path.startsWith('/api/config/')
 });
 
 // Apply rate limiting to API routes
